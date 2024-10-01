@@ -6,6 +6,7 @@ const createError = require('http-errors');
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
 const { PrismaClient } = require('@prisma/client');
 // const passport = require('passport');
@@ -16,6 +17,7 @@ const bcrypt = require('bcryptjs');
 // const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 
 const postsRouter = require('./routes/posts');
+const commentsRouter = require('./routes/comments');
 
 
 
@@ -32,9 +34,6 @@ const app = express();
 // });
 
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
-
 // app.use(
 //   expressSession({
 //     secret: 'passport',
@@ -50,6 +49,8 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(logger('dev'));
+
 
 // passport.use(
 //   new LocalStrategy(async (username, password, done) => {
@@ -107,7 +108,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 
 
-app.use('/posts', postsRouter); //get all posts
+app.use('/posts', postsRouter);
+app.use('/posts/:postId/comments', commentsRouter);
 
 
 // catch 404 and forward to error handler
@@ -123,7 +125,6 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
 });
 
 module.exports = app;
