@@ -11,11 +11,14 @@ const logger = require('morgan');
 const { PrismaClient } = require('@prisma/client');
 // const passport = require('passport');
 // const LocalStrategy = require('passport-local').Strategy;
+const jwt = require('jsonwebtoken');
+
 const bcrypt = require('bcryptjs');
 
 // const expressSession = require('express-session');
 // const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 
+const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
 
@@ -99,15 +102,36 @@ app.use(logger('dev'));
 // });
 
 
-// app.use((req, res, next) => {
-//   res.locals.currentUser = req.user;
-//   next();
+
+//*  JSON WEB TOKEN      *//
+// app.get('/secrets', verifyToken, (req, res) => {
+//   jwt.verify(req.token, 'SecretKey', (err, user) => {
+//     if (err) {
+//       res.sendStatus(403);
+//     } else {
+//       res.json(user)
+//     }
+//   })
+// });
+// app.post('/login', (req, res, next) => {
+//   const user = {
+//     id: 2,
+//     username: 'mohamed',
+//     password: '12345678'
+//   };
+
+//   jwt.sign(user, 'SecretKey', { expiresIn: '30s' }, (err, token) => {
+//     if (err)
+//       next(err);
+//     res.json({ token });
+//   });
 // });
 
 
 
-
-
+app.get('/', (req, res, next) => res.redirect('/posts'));
+// TODO handle user sign in / sign up
+app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/posts/:postId/comments', commentsRouter);
 
