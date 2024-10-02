@@ -21,6 +21,7 @@ model User {
   role     Role      @default(USER)
   comments Comment[]
   Post     Post[]
+  // avatarUrl String    @default("https://github.com/shadcn.png")
 }
 
 model Post {
@@ -32,6 +33,7 @@ model Post {
   comments    Comment[]
   isPublished Boolean   @default(true)
   publishedAt DateTime  @default(now())
+  // thumbnailUrl String    @default("https://tx.shadcn.com/_next/image?url=%2Fimages%2Fblog%2Fblog-post-1.jpg&w=750&q=75")
 }
 
 model Comment {
