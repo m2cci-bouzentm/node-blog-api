@@ -7,7 +7,7 @@ const validateComment = [
   body('content')
     .trim()
     .notEmpty().withMessage('Comment content cannot be empty')
-    .isLength({ min: 1, max: 1500 }).withMessage('Comment content must be at least 1 characters long')
+    .isLength({ min: 1, max: 1000 }).withMessage('Comment content must be at least 1 characters long')
 ];
 
 

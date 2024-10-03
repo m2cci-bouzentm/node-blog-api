@@ -16,9 +16,8 @@ router.get('/:id', postsController.getPostById);
 
 
 // TODO will be protected routes
-router.use(isAuthorized);
-router.post('/', postsController.createPost);
-router.put('/:id', postsController.updatePost);
-router.delete('/:id', postsController.deletePost);
+router.post('/', isAuthorized, postsController.createPost);
+router.put('/:id', isAuthorized, postsController.updatePost);
+router.delete('/:id', isAuthorized, postsController.deletePost);
 
 module.exports = router;

@@ -7,10 +7,11 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
+const cors = require('cors');
 
 const { PrismaClient } = require('@prisma/client');
-// const passport = require('passport');
-// const LocalStrategy = require('passport-local').Strategy;
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcryptjs');
@@ -48,6 +49,7 @@ const app = express();
 // );
 // app.use(passport.session());
 
+app.use(cors({ origin: 'http://localhost:5173' }))
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -55,29 +57,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
 
-// passport.use(
-//   new LocalStrategy(async (username, password, done) => {
-//     try {
-//       const user = await prisma.user.findUnique({
-//         where: { username: username },
-//       });
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      const user = await prisma.user.findUnique({
+        where: { username: username },
+      });
 
-//       if (!user) {
-//         return done(null, false, { message: 'Incorrect username' });
-//       }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username' });
+      }
 
-//       const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await bcrypt.compare(password, user.password);
 
-//       if (!isMatch) {
-//         return done(null, false, { message: 'Incorrect password' });
-//       }
+      if (!isMatch) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
 
-//       return done(null, user);
-//     } catch (error) {
-//       done(error);
-//     }
-//   })
-// );
+      return done(null, user);
+    } catch (error) {
+      done(error);
+    }
+  })
+);
 
 
 // passport.serializeUser((user, done) => {
@@ -120,11 +122,11 @@ app.use(logger('dev'));
 //     password: '12345678'
 //   };
 
-//   jwt.sign(user, 'SecretKey', { expiresIn: '30s' }, (err, token) => {
-//     if (err)
-//       next(err);
-//     res.json({ token });
-//   });
+// jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '30s' }, (err, token) => {
+//   if (err)
+//     next(err);
+//   res.json({ token });
+// });
 // });
 
 
