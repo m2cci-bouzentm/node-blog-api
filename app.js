@@ -16,7 +16,7 @@ const jwt = require('jsonwebtoken');
 
 const bcrypt = require('bcryptjs');
 
-// const expressSession = require('express-session');
+const expressSession = require('express-session');
 // const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
 
 const indexRouter = require('./routes/index');
@@ -40,7 +40,7 @@ const app = express();
 
 // app.use(
 //   expressSession({
-//     secret: 'passport',
+//     secret: process.env.SECRET_KEY,
 //     resave: false,
 //     saveUninitialized: false,
 //     cookie: { maxAge: 24 * 60 * 60 * 1000 }, // equal to 1 day
@@ -57,51 +57,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
 
-passport.use(
-  new LocalStrategy(async (username, password, done) => {
-    try {
-      const user = await prisma.user.findUnique({
-        where: { username: username },
-      });
-
-      if (!user) {
-        return done(null, false, { message: 'Incorrect username' });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (!isMatch) {
-        return done(null, false, { message: 'Incorrect password' });
-      }
-
-      return done(null, user);
-    } catch (error) {
-      done(error);
-    }
-  })
-);
-
-
-// passport.serializeUser((user, done) => {
-//   done(null, user.id);
-// });
-// passport.deserializeUser(async (id, done) => {
-//   try {
-//     const user = await prisma.user.findUnique({
-//       where: { id: id },
-//       include: {
-//         folders: {
-//           include: {
-//             files: true,
-//           }
-//         },
-//       },
-//     });
-//     done(null, user);
-//   } catch (error) {
-//     done(error);
-//   }
-// });
 
 
 

@@ -36,18 +36,65 @@ const validateUserSignUp = [
     }),
 ];
 
+const verifyUser = async (username, password) => {
+  const user = await prisma.user.findUnique({
+    where: { username: username },
+  });
+
+  if (!user) {
+    return { message: 'Incorrect username' };
+  }
+
+  const isMatch = await bcrypt.compare(password, user.password);
+  if (!isMatch) {
+    return { message: 'Incorrect password' }
+  }
+
+  return { user };
+}
+const verifyToken = (req, res, next) => {
+  const bearerHeader = req.headers['authorization'];
+
+  if (typeof bearerHeader === 'undefined') {
+    return next(new Error("User Not Logged In"));
+  }
+
+  req.token = bearerHeader.split(' ')[1];
+  next();
+}
+
 // TODO user validation && asyncHandler
+// TODO passport verify function of local strategy
 const handleUserSignIn = async (req, res, next) => {
-  // TODO passport verify function of local strategy
-  const auth = await passport.authenticate('local', { failureMessage: true });
+  const { username, password } = req.body;
+  const verifyUserRes = await verifyUser(username, password);
 
-  console.log(auth);
+  // failed attempt to log in
+  if (typeof verifyUserRes.message !== "undefined") {
+    return res.json(verifyUserRes)
+  }
+  const userWithoutPw = { ...verifyUserRes.user, password: '' };
 
-  // jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '1d' }, (err, token) => {
-  //   if (err) return next(err);
-  //   res.json({ user, token });
-  // });
+  jwt.sign(userWithoutPw, process.env.SECRET_KEY, { expiresIn: '1d' }, (err, token) => {
+    if (err) return next(err);
+    res.json({ user: userWithoutPw, token });
+  });
+
 };
+
+const handleLoggedInVerification = [
+  verifyToken,
+  (req, res, next) => {
+    jwt.verify(req.token, process.env.SECRET_KEY, (err, user) => {
+      if (err) {
+        res.sendStatus(403);
+      } else {
+        res.json(user)
+      }
+    })
+  }];
+
+
 const handleUserSignUp = asyncHandle(async (req, res, next) => {
   const result = validationResult(req);
 
@@ -82,4 +129,5 @@ module.exports = {
   handleUserSignIn,
   handleUserSignUp,
   handleUserSignOut,
+  handleLoggedInVerification,
 };
