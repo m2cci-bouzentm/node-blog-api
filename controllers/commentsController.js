@@ -20,7 +20,11 @@ const getCommentsByPostId = asyncHandle(async (req, res, next) => {
   const comments = await prisma.comment.findMany({
     where: {
       postId
-    }
+    },
+    orderBy: {
+      publishedAt: 'asc',
+    },
+
   });
 
   res.json(comments);
@@ -41,6 +45,7 @@ const createCommentOnPost = [validateComment, asyncHandle(async (req, res, next)
     data: {
       content, postId, authorId
     },
+
   });
 
   res.json(comment);

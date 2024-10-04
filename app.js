@@ -25,22 +25,7 @@ const prisma = new PrismaClient();
 
 const app = express();
 
-// const prismaSessionsStore = new PrismaSessionStore(prisma, {
-//   checkPeriod: 2 * 60 * 1000,
-//   dbRecordIdIsSessionId: true,
-//   dbRecordIdFunction: undefined,
-// });
 
-// app.use(
-//   expressSession({
-//     secret: process.env.SECRET_KEY,
-//     resave: false,
-//     saveUninitialized: false,
-//     cookie: { maxAge: 24 * 60 * 60 * 1000 }, // equal to 1 day
-//     store: prismaSessionsStore,
-//   })
-// );
-// app.use(passport.session());
 
 app.use(cors({ origin: 'http://localhost:5173' }));
 app.use(cookieParser());
@@ -49,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
-// jwt verification custom middleware
+// authentication: jwt verification custom middleware 
 app.use(function jwtVerification(req, res, next) {
   const bearerHeader = req.headers['authorization'];
 
@@ -72,7 +57,6 @@ app.use(function jwtVerification(req, res, next) {
 });
 
 app.get('/', (req, res, next) => res.redirect('/posts'));
-// TODO handle user sign in / sign up
 app.use('/', indexRouter);
 app.use('/posts', postsRouter);
 app.use('/posts/:postId/comments', commentsRouter);

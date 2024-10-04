@@ -43,7 +43,10 @@ const getPostById = asyncHandle(async (req, res, next) => {
       comments: {
         include: {
           author: true
-        }
+        },
+        orderBy: {
+          publishedAt: 'desc',
+        },
       }
     }
   });
