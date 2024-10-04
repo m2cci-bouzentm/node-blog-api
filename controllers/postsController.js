@@ -39,7 +39,12 @@ const getPostById = asyncHandle(async (req, res, next) => {
       id
     },
     include: {
-      comments: true,
+      author: true,
+      comments: {
+        include: {
+          author: true
+        }
+      }
     }
   });
 
