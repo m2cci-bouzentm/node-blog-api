@@ -25,16 +25,16 @@ const prisma = new PrismaClient();
 
 const app = express();
 
-
-
-app.use(cors({ origin: 'http://localhost:5173' }));
+app.use(cors({
+  origin: ['http://localhost:5173', 'http://localhost:5174']
+}));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
-// authentication: jwt verification custom middleware 
+// authentication: jwt verification custom middleware to no which user is asking for resources
 app.use(function jwtVerification(req, res, next) {
   const bearerHeader = req.headers['authorization'];
 
@@ -71,6 +71,8 @@ app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  console.log(err);
 
   // render the error page
   res.status(err.status || 500);

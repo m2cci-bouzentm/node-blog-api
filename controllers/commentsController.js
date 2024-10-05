@@ -59,8 +59,12 @@ const updateComment = [validateComment, asyncHandle(async (req, res, next) => {
   }
 
   const { id } = req.params;
-  const { content } = req.body;
+  const { content, authorId } = req.body;
 
+  // role USER can update only his own comments
+  if (req.currentUser && req.currentUser.role === 'USER' && req.currentUser.id !== authorId) {
+    return res.sendStatus(403);
+  }
 
   const comment = await prisma.comment.update({
     where: {
@@ -76,6 +80,14 @@ const updateComment = [validateComment, asyncHandle(async (req, res, next) => {
 
 const deleteComment = asyncHandle(async (req, res, next) => {
   const { id } = req.params;
+
+  const { authorId } = req.body;
+
+  // role USER can delete only his own comments
+  if (req.currentUser && req.currentUser.role === 'USER' && req.currentUser.id !== authorId) {
+    return res.sendStatus(403);
+  }
+
 
   const comment = await prisma.comment.delete({
     where: {
