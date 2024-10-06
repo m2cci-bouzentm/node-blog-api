@@ -34,7 +34,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(logger('dev'));
 
-// authentication: jwt verification custom middleware to no which user is asking for resources
+// authentication: jwt verification custom middleware to know which user is asking for resources
 app.use(function jwtVerification(req, res, next) {
   const bearerHeader = req.headers['authorization'];
 

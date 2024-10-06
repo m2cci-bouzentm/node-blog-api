@@ -22,12 +22,18 @@ const getPosts = asyncHandle(async (req, res, next) => {
   // return all posts to the author with comments
   if (req.currentUser !== null && req.currentUser.role === 'AUTHOR') {
     posts = await prisma.post.findMany({
-      include: { comments: true }
+      include: { comments: true, author: true },
+      orderBy: {
+        publishedAt: 'desc'
+      }
     });
   } else {
     posts = await prisma.post.findMany({
       where: {
         isPublished: true,
+      },
+      include: {
+        author: true
       },
       orderBy: {
         publishedAt: 'desc'
