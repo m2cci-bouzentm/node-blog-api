@@ -7,21 +7,21 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
 
-const { PrismaClient } = require('@prisma/client');
-const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
 const jwt = require('jsonwebtoken');
 
-const bcrypt = require('bcryptjs');
-
-const expressSession = require('express-session');
+// unused dependencies | I opted for jwt and localStorage
+// const { PrismaClient } = require('@prisma/client');
+// const passport = require('passport');
+// const LocalStrategy = require('passport-local').Strategy;
+// const bcrypt = require('bcryptjs');
+// const expressSession = require('express-session');
 // const { PrismaSessionStore } = require('@quixo3/prisma-session-store');
+// const prisma = new PrismaClient();
 
 const indexRouter = require('./routes/index');
 const postsRouter = require('./routes/posts');
 const commentsRouter = require('./routes/comments');
 
-const prisma = new PrismaClient();
 
 const app = express();
 

@@ -5,7 +5,6 @@ const asyncHandle = require('express-async-handler');
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const passport = require('passport');
 const prisma = new PrismaClient();
 
 
