@@ -75,6 +75,7 @@ Create a `.env` file in the root directory and add the following environment var
 `env
     DATABASE_URL=your_database_url
     SECRET_KEY=your_secret_key
+    AUTHOR_KEY=a_secret_key_to_become_an_author
     PORT=3000
     `
 
