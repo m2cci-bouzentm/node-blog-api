@@ -69,15 +69,14 @@ To start the server in production mode:
 - **PUT /posts/:postId/comments/:commentId**: Update a specific comment.
 - **DELETE /posts/:postId/comments/:commentId**: Delete a specific comment.
 
-## Environment Variables
+### Environment Variables
 
 Create a `.env` file in the root directory and add the following environment variables:
-`env
-    DATABASE_URL=your_database_url
-    SECRET_KEY=your_secret_key
-    AUTHOR_KEY=a_secret_key_to_become_an_author
-    PORT=3000
-    `
+
+- \*\*DATABASE_URL=your_database_url
+- \*\*SECRET_KEY=your_secret_key
+- \*\*AUTHOR_KEY=a_secret_key_to_become_an_author
+- \*\*PORT=3000
 
 ## Project Structure
 
