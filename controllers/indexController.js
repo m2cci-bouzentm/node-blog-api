@@ -141,7 +141,7 @@ const handleUserSignUp = [
       return res.json({ errors: result.array() });
     }
 
-    const { username, email, password } = req.body;
+    const { username, email, password, authorKey } = req.body;
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -150,6 +150,7 @@ const handleUserSignUp = [
         username,
         email,
         password: hashedPassword,
+        role: authorKey === process.env.AUTHOR_KEY ? "AUTHOR" : "USER"
       },
     });
 

@@ -26,7 +26,7 @@ const prisma = new PrismaClient();
 const app = express();
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://localhost:5174']
+  origin: ['http://localhost:5173', 'http://localhost:5174', 'https://blog-api-front-author.vercel.app', 'https://blog-api-user-front.vercel.app', 'https://blog-api-author-front-aj8lxr6fx-mohamed-24-03-2022s-projects.vercel.app', 'https://blog-api-author-front-git-main-mohamed-24-03-2022s-projects.vercel.app', 'https://blog-api-user-front-git-main-mohamed-24-03-2022s-projects.vercel.app', 'https://blog-api-user-front-epr5i70jl-mohamed-24-03-2022s-projects.vercel.app']
 }));
 app.use(cookieParser());
 app.use(express.json());
